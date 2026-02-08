@@ -212,7 +212,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-gray-800">Trusted Partners</h4>
-                            <p class="text-gray-600">Vetted landlords and moving services</p>
+                            <p class="text-gray-600">Vetted property owners </p>
                         </div>
                     </div>
 
@@ -271,7 +271,7 @@
                                     </li>
                                     <li class="flex items-start">
                                         <i class="fas fa-check text-[#3CB371] mr-2 mt-1 text-xs"></i>
-                                        <span>Access landlord contacts</span>
+                                        <span>Access property owner contacts</span>
                                     </li>
                                     <li class="flex items-start">
                                         <i class="fas fa-check text-[#3CB371] mr-2 mt-1 text-xs"></i>
@@ -285,7 +285,7 @@
                                 <div class="w-20 h-20 rounded-full bg-gradient-to-r from-[#3CB371] to-green-100 flex items-center justify-center mx-auto mb-4">
                                     <i class="fas fa-home text-3xl text-[#3CB371]"></i>
                                 </div>
-                                <h4 class="font-bold text-gray-800 text-lg mb-2">Landlord</h4>
+                                <h4 class="font-bold text-gray-800 text-lg mb-2">Property Owner</h4>
                                 <p class="text-gray-600 text-sm mb-4">Listing rental properties</p>
                                 <ul class="text-left text-sm text-gray-600 space-y-2">
                                     <li class="flex items-start">
