@@ -1072,13 +1072,13 @@ if ($is_admin) {
                                         <button class="inquiry-filter px-6 py-4 font-semibold border-b-2 border-[#2FA4E7] text-[#2FA4E7]" data-filter="all">
                                             All <span class="ml-2 bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full"><?php echo $viewing_count; ?></span>
                                         </button>
-                                        <button class="inquiry-filter px-6 py-4 font-semibold text-gray-600 hover:text-gray-800" data-filter="requests">
+                                        <button style="display: none;" class="inquiry-filter px-6 py-4 font-semibold text-gray-600 hover:text-gray-800" data-filter="requests">
                                             Requests <span class="ml-2 bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full">2</span>
                                         </button>
-                                        <button class="inquiry-filter px-6 py-4 font-semibold text-gray-600 hover:text-gray-800" data-filter="messages">
+                                        <button style="display: none;" class="inquiry-filter px-6 py-4 font-semibold text-gray-600 hover:text-gray-800" data-filter="messages">
                                             Messages <span class="ml-2 bg-green-100 text-green-600 text-xs px-2 py-1 rounded-full">1</span>
                                         </button>
-                                        <button class="inquiry-filter px-6 py-4 font-semibold text-gray-600 hover:text-gray-800" data-filter="unread">
+                                        <button style="display: none;" class="inquiry-filter px-6 py-4 font-semibold text-gray-600 hover:text-gray-800" data-filter="unread">
                                             Unread <span class="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">2</span>
                                         </button>
                                     </div>
@@ -3255,7 +3255,8 @@ if ($is_admin) {
 
             properties.forEach(property => {
                 const card = document.createElement('div');
-                card.className = 'dashboard-card bg-white rounded-2xl shadow-md overflow-hidden';
+                card.className = 'dashboard-card bg-white rounded-2xl shadow-md overflow-hidden cursor-pointer';
+                card.onclick = function() { viewProperty(property.id); };
 
                 const features = [];
                 if (property.bedrooms) features.push(`<div class="flex items-center"><i class="fas fa-bed text-[#2FA4E7] mr-1"></i><span class="text-sm">${property.bedrooms} Bed</span></div>`);
@@ -3313,7 +3314,7 @@ if ($is_admin) {
                                 <p class="text-sm text-gray-600">Viewings</p>
                                 <p class="font-bold">0 scheduled</p>
                             </div>
-                            <div class="space-x-2">
+                            <div class="space-x-2" onclick="event.stopPropagation();">
                                 <button class="edit-property-btn px-4 py-2 bg-blue-50 text-[#2FA4E7] font-semibold rounded-lg hover:bg-blue-100 transition-colors duration-300 text-sm" data-property-id="${property.id}">
                                     Edit
                                 </button>
@@ -3383,7 +3384,7 @@ if ($is_admin) {
                             }
                             
                             return `
-                                <tr class="border-b border-gray-50 hover:bg-gray-50">
+                                <tr class="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onclick="viewProperty(${property.id});">
                                     <td class="py-4">
                                         <div class="flex items-center">
                                             <div class="w-12 h-12 rounded-lg overflow-hidden mr-3">
@@ -3405,7 +3406,7 @@ if ($is_admin) {
                                         <span class="font-medium">0 scheduled</span>
                                     </td>
                                     <td class="py-4">
-                                        <div class="space-x-2">
+                                        <div class="space-x-2" onclick="event.stopPropagation();">
                                             <button class="edit-property-btn px-3 py-2 bg-blue-50 text-[#2FA4E7] font-semibold rounded-lg hover:bg-blue-100 transition-colors duration-300 text-sm" data-property-id="${property.id}">
                                                 Edit
                                             </button>
@@ -3663,6 +3664,288 @@ if ($is_admin) {
                 }
             });
         }
+    </script>
+
+    <!-- Property Details Modal (from houses.php) -->
+    <div id="propertyModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl w-full max-w-6xl max-h-[90vh] overflow-y-auto modal-enter">
+                <!-- Modal Content -->
+                <div class="flex flex-col md:flex-row h-full">
+                    <!-- Left Column - Property Images & Details -->
+                    <div class="md:w-2/3 overflow-y-auto">
+                        <!-- Modal Header -->
+                        <div class="sticky top-0 z-10 bg-white border-b border-gray-100 p-6 flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-gray-800" id="profileModalPropertyTitle">Property Details</h2>
+                            <button id="profileCloseModal" class="text-gray-500 hover:text-gray-800 text-2xl">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <!-- Property Images Gallery -->
+                        <div class="p-6">
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="col-span-2 h-80 rounded-2xl overflow-hidden">
+                                    <img
+                                        id="profileModalMainImage"
+                                        src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80"
+                                        alt="Property"
+                                        class="w-full h-full object-cover"
+                                    >
+                                </div>
+                                <div class="h-40 rounded-xl overflow-hidden">
+                                    <img id="profileModalImage2" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=958&q=80" alt="Living Room" class="w-full h-full object-cover">
+                                </div>
+                                <div class="h-40 rounded-xl overflow-hidden">
+                                    <img id="profileModalImage3" src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="Kitchen" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+
+                            <!-- Property Details -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <!-- Left Column -->
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-800 mb-4">Property Details</h3>
+                                    <div class="space-y-4">
+                                        <div class="flex justify-between py-3 border-b border-gray-100">
+                                            <span class="text-gray-600">Property Type</span>
+                                            <span class="font-semibold" id="profileModalPropertyType">-</span>
+                                        </div>
+                                        <div class="flex justify-between py-3 border-b border-gray-100" id="profileBedroomsRow">
+                                            <span class="text-gray-600">Bedrooms</span>
+                                            <span class="font-semibold" id="profileModalBedrooms">-</span>
+                                        </div>
+                                        <div class="flex justify-between py-3 border-b border-gray-100">
+                                            <span class="text-gray-600">Bathrooms</span>
+                                            <span class="font-semibold" id="profileModalBathrooms">-</span>
+                                        </div>
+                                        <div class="flex justify-between py-3 border-b border-gray-100">
+                                            <span class="text-gray-600">Square Feet</span>
+                                            <span class="font-semibold" id="profileModalSquareFeet">-</span>
+                                        </div>
+                                        <div class="flex justify-between py-3 border-b border-gray-100">
+                                            <span class="text-gray-600">Parking</span>
+                                            <span class="font-semibold" id="profileModalParking">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column -->
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-800 mb-4">Location & Pricing</h3>
+                                    <div class="space-y-4">
+                                        <div class="flex justify-between py-3 border-b border-gray-100">
+                                            <span class="text-gray-600">Location</span>
+                                            <span class="font-semibold" id="profileModalLocation">-</span>
+                                        </div>
+                                        <div class="flex justify-between py-3 border-b border-gray-100">
+                                            <span class="text-gray-600" id="profilePriceLabel">Monthly Rent</span>
+                                            <span class="font-bold text-lg text-[#2FA4E7]" id="profileModalRent">-</span>
+                                        </div>
+                                        <div class="flex justify-between py-3 border-b border-gray-100">
+                                            <span class="text-gray-600">Security Deposit</span>
+                                            <span class="font-semibold" id="profileModalDeposit">-</span>
+                                        </div>
+                                        <div class="flex justify-between py-3 border-b border-gray-100">
+                                            <span class="text-gray-600">Available From</span>
+                                            <span class="font-semibold" id="profileModalAvailable">Immediately</span>
+                                        </div>
+                                        <div class="flex justify-between py-3 border-b border-gray-100">
+                                            <span class="text-gray-600">Verified Status</span>
+                                            <span class="px-3 py-1 bg-gradient-to-r from-[#2FA4E7] to-[#3CB371] text-white rounded-full text-xs font-semibold">Verified</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Amenities -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-gray-800 mb-4">Amenities & Features</h3>
+                                <div id="profileModalAmenities" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    <!-- Amenities will be loaded dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column - Booking & Actions -->
+                    <div class="md:w-1/3 bg-gradient-to-b from-blue-50 to-green-50 p-6 overflow-y-auto border-l border-gray-100">
+                        <!-- Property Info Card -->
+                        <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Property Overview</h3>
+                            <p id="profileModalDescription" class="text-gray-600 mb-4">Loading...</p>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <i class="fas fa-user text-[#2FA4E7] mr-3"></i>
+                                    <span>Listed by Property Owner</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar text-[#3CB371] mr-3"></i>
+                                    <span>Available for Viewing</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="space-y-4">
+                            <button class="w-full py-4 bg-gradient-to-r from-[#2FA4E7] to-[#3CB371] text-white font-semibold rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105">
+                                <i class="fas fa-edit mr-2"></i> Edit Property
+                            </button>
+                            <button class="w-full py-4 border border-[#2FA4E7] text-[#2FA4E7] font-semibold rounded-xl hover:bg-blue-50 transition-all duration-300">
+                                <i class="fas fa-chart-bar mr-2"></i> View Analytics
+                            </button>
+                            <button class="w-full py-4 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300">
+                                <i class="fas fa-share-alt mr-2"></i> Share Listing
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Property Modal Styles -->
+    <style>
+        /* Modal Animation */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms, transform 300ms;
+        }
+        
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 300ms, transform 300ms;
+        }
+    </style>
+
+    <script>
+        // Profile Property Modal Elements
+        const profilePropertyModal = document.getElementById('propertyModal');
+        const profileCloseModal = document.getElementById('profileCloseModal');
+        
+        // Open Profile Property Modal with AJAX
+        function openProfilePropertyModal(propertyId) {
+            // Show loading state
+            document.getElementById('profileModalPropertyTitle').textContent = 'Loading...';
+            profilePropertyModal.classList.remove('hidden');
+            setTimeout(() => {
+                profilePropertyModal.querySelector('.modal-enter').classList.add('modal-enter-active');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+            
+            // Fetch property data
+            fetch(`api/property.php?id=${propertyId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const house = data.data;
+                    
+                    // Update modal content
+                    document.getElementById('profileModalPropertyTitle').textContent = house.title;
+                    document.getElementById('profileModalPropertyType').textContent = house.property_type ? house.property_type.charAt(0).toUpperCase() + house.property_type.slice(1) : '-';
+                    document.getElementById('profileModalBedrooms').textContent = house.bedrooms == 0 ? 'N/A' : house.bedrooms;
+                    document.getElementById('profileModalBathrooms').textContent = house.bathrooms || 'N/A';
+                    document.getElementById('profileModalSquareFeet').textContent = house.size_sqft ? house.size_sqft + ' sqft' : 'N/A';
+                    document.getElementById('profileModalParking').textContent = house.parking_spaces ? house.parking_spaces + ' Spaces' : 'N/A';
+                    document.getElementById('profileModalLocation').textContent = house.location || '-';
+                    document.getElementById('profileModalMainImage').src = house.image_url_1 || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1073&q=80';
+                    document.getElementById('profileModalDescription').textContent = house.description ? house.description.substring(0, 200) + '...' : 'No description available.';
+                    
+                    // Update thumbnails
+                    document.getElementById('profileModalImage2').src = house.image_url_2 || house.image_url_1 || 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=958&q=80';
+                    document.getElementById('profileModalImage3').src = house.image_url_3 || house.image_url_1 || 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80';
+                    
+                    // Update pricing based on listing type
+                    const priceLabel = document.getElementById('profilePriceLabel');
+                    const rentElement = document.getElementById('profileModalRent');
+                    const depositElement = document.getElementById('profileModalDeposit');
+                    
+                    if (house.listing_type === 'airbnb') {
+                        priceLabel.textContent = 'Price per Night';
+                        rentElement.innerHTML = 'KES ' + (house.price_night ? parseFloat(house.price_night).toLocaleString() : (house.price ? parseFloat(house.price).toLocaleString() : 'N/A')) + ' <span class="text-sm text-gray-600">/night</span>';
+                        depositElement.textContent = 'N/A';
+                    } else if (house.listing_type === 'sale') {
+                        priceLabel.textContent = 'Selling Price';
+                        rentElement.innerHTML = 'KES ' + (house.price_sale ? parseFloat(house.price_sale).toLocaleString() : (house.price ? parseFloat(house.price).toLocaleString() : 'N/A'));
+                        depositElement.textContent = 'N/A';
+                    } else {
+                        priceLabel.textContent = 'Monthly Rent';
+                        rentElement.innerHTML = 'KES ' + (house.price ? parseFloat(house.price).toLocaleString() : 'N/A');
+                        depositElement.textContent = house.security_deposit ? 'KES ' + parseFloat(house.security_deposit).toLocaleString() : 'N/A';
+                    }
+                    
+                    document.getElementById('profileModalAvailable').textContent = house.available_from || 'Immediately';
+                    
+                    // Hide bedrooms row for single room or bedsitter
+                    document.getElementById('profileBedroomsRow').style.display = (house.property_type === 'single room' || house.property_type === 'bedsitter') ? 'none' : 'flex';
+                    
+                    // Update amenities
+                    const amenitiesContainer = document.getElementById('profileModalAmenities');
+                    const amenities = [];
+                    if (house.wifi) amenities.push('<div class="flex items-center p-3 bg-gray-50 rounded-xl"><i class="fas fa-wifi text-[#2FA4E7] mr-3"></i><span>High-Speed WiFi</span></div>');
+                    if (house.swimming_pool) amenities.push('<div class="flex items-center p-3 bg-gray-50 rounded-xl"><i class="fas fa-swimming-pool text-[#3CB371] mr-3"></i><span>Swimming Pool</span></div>');
+                    if (house.gym) amenities.push('<div class="flex items-center p-3 bg-gray-50 rounded-xl"><i class="fas fa-dumbbell text-[#2FA4E7] mr-3"></i><span>Gym Access</span></div>');
+                    if (house.security_24_7) amenities.push('<div class="flex items-center p-3 bg-gray-50 rounded-xl"><i class="fas fa-shield-alt text-[#3CB371] mr-3"></i><span>24/7 Security</span></div>');
+                    if (house.pet_friendly) amenities.push('<div class="flex items-center p-3 bg-gray-50 rounded-xl"><i class="fas fa-paw text-[#2FA4E7] mr-3"></i><span>Pet Friendly</span></div>');
+                    if (house.dedicated_parking) amenities.push('<div class="flex items-center p-3 bg-gray-50 rounded-xl"><i class="fas fa-car text-[#3CB371] mr-3"></i><span>Dedicated Parking</span></div>');
+                    if (house.furnished) amenities.push('<div class="flex items-center p-3 bg-gray-50 rounded-xl"><i class="fas fa-couch text-[#2FA4E7] mr-3"></i><span>Furnished</span></div>');
+                    if (house.balcony) amenities.push('<div class="flex items-center p-3 bg-gray-50 rounded-xl"><i class="fas fa-window-maximize text-[#3CB371] mr-3"></i><span>Balcony</span></div>');
+                    
+                    if (amenities.length === 0) {
+                        amenitiesContainer.innerHTML = '<p class="text-gray-500 col-span-full">No amenities listed</p>';
+                    } else {
+                        amenitiesContainer.innerHTML = amenities.join('');
+                    }
+                    
+                } else {
+                    showNotification('Failed to load property details', 'error');
+                    closeProfilePropertyModal();
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching property:', error);
+                showNotification('Error loading property details', 'error');
+                closeProfilePropertyModal();
+            });
+        }
+        
+        // Close Profile Property Modal
+        function closeProfilePropertyModal() {
+            profilePropertyModal.querySelector('.modal-enter').classList.remove('modal-enter-active');
+            setTimeout(() => {
+                profilePropertyModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+        
+        // Close modal event listeners
+        if (profileCloseModal) {
+            profileCloseModal.addEventListener('click', closeProfilePropertyModal);
+        }
+        
+        profilePropertyModal?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProfilePropertyModal();
+            }
+        });
+        
+        // Override viewProperty to use profile modal
+        window.viewProperty = function(houseId) {
+            openProfilePropertyModal(houseId);
+        };
     </script>
 </body>
 </html>
