@@ -1086,7 +1086,8 @@ session_start();
 
         // Check if user is logged in
         if (!window.userLoggedIn) {
-            showNotification('Please login to submit viewing requests', 'error');
+            // Redirect to login page
+            window.location.href = 'index.php?page=login&redirect=' + encodeURIComponent(window.location.href);
             return;
         }
 

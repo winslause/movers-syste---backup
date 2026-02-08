@@ -25,7 +25,7 @@ if ($page === 'logout') {
 }
 
 // Pages that don't require authentication
-$public_pages = ['home', 'login', 'register', 'reset_password', 'moving_services', 'about'];
+$public_pages = ['home', 'login', 'register', 'reset_password', 'moving_services', 'about', 'houses'];
 
 // Check if user is logged in for protected pages
 if (!isset($_SESSION['user_id']) && !in_array($page, $public_pages)) {

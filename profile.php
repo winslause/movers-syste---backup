@@ -263,6 +263,29 @@ if ($is_admin) {
         .timeline-item:last-child::after {
             display: none;
         }
+        
+        /* Modal Animations */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+        }
+        
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            transition: opacity 300ms, transform 300ms;
+        }
+        
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+            transition: opacity 300ms, transform 300ms;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -1908,10 +1931,23 @@ if ($is_admin) {
         // Modal functions
         function openModal(modal) {
             modal.classList.remove('hidden');
+            // Trigger animation
+            setTimeout(() => {
+                const modalContent = modal.querySelector('.modal-enter');
+                if (modalContent) {
+                    modalContent.classList.add('modal-enter-active');
+                }
+            }, 10);
         }
 
         function closeModal(modal) {
-            modal.classList.add('hidden');
+            const modalContent = modal.querySelector('.modal-enter');
+            if (modalContent) {
+                modalContent.classList.remove('modal-enter-active');
+            }
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
         }
 
         // Handle listing type change for dynamic pricing fields
