@@ -52,7 +52,7 @@
                     <a href="index.php?page=house" class="px-8 py-4 bg-gradient-to-r from-[#2FA4E7] to-[#3CB371] text-white font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center">
                         <i class="fas fa-search mr-3"></i> Start Your Search
                     </a>
-                    <a href="#" class="px-8 py-4 bg-white text-gray-800 font-semibold rounded-xl shadow-lg hover:shadow-xl border border-gray-200 transition-all duration-300 flex items-center justify-center">
+                    <a  style="display: none;" href="#" class="px-8 py-4 bg-white text-gray-800 font-semibold rounded-xl shadow-lg hover:shadow-xl border border-gray-200 transition-all duration-300 flex items-center justify-center">
                         <i class="fas fa-play-circle mr-3 text-[#2FA4E7]"></i> How It Works
                     </a>
                 </div>

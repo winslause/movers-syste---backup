@@ -16,7 +16,7 @@
                 <span class="brand-gradient">Get In Touch</span> With Us
             </h2>
             <p class="text-gray-600 text-xl max-w-3xl mx-auto">
-                Have questions about house hunting or moving services? We're here to help you every step of the way.
+                Have questions about house hunting? We're here to help you every step of the way.
             </p>
         </div>
 
@@ -193,7 +193,7 @@
                                 <button type="button" class="subject-btn py-3 rounded-xl border border-gray-300 text-gray-700 hover:border-[#2FA4E7] hover:text-[#2FA4E7] transition-all duration-300" data-subject="House Hunting">
                                     <i class="fas fa-home mr-2"></i> House Hunting
                                 </button>
-                                <button type="button" class="subject-btn py-3 rounded-xl border border-gray-300 text-gray-700 hover:border-[#3CB371] hover:text-[#3CB371] transition-all duration-300" data-subject="Moving Services">
+                                <button style="display: none;" type="button" class="subject-btn py-3 rounded-xl border border-gray-300 text-gray-700 hover:border-[#3CB371] hover:text-[#3CB371] transition-all duration-300" data-subject="Moving Services">
                                     <i class="fas fa-truck-moving mr-2"></i> Moving Services
                                 </button>
                                 <button type="button" class="subject-btn py-3 rounded-xl border border-gray-300 text-gray-700 hover:border-[#2FA4E7] hover:text-[#2FA4E7] transition-all duration-300" data-subject="Landlord Inquiry">
@@ -329,7 +329,7 @@
             </div>
             <div>
                 <p class="font-semibold text-gray-800 mb-1">Need help?</p>
-                <p class="text-sm text-gray-600 mb-2">We're here to assist you with house hunting or moving services.</p>
+                <p class="text-sm text-gray-600 mb-2">We're here to assist you with house hunting  services.</p>
                 <button id="closeNotification" class="text-xs text-[#2FA4E7] font-medium hover:underline">
                     Got it, thanks!
                 </button>
